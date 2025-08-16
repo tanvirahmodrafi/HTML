@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Creating List</title>
+</head>
+<body>
+    <h2>Unordered HTML List </h2>
+<ul>
+<li>Square</li>
+<li>Circle</li>
+<li>Disc</li>
+<li>None</li>
+</ul>
+<h3>Nested Unordered lists</h3>
+<ul type="Square">
+<li>Sandwiches</li>
+<ul>
+<li>Ham and Cheese</li>
+<li>Grilled Cheese</li>
+</ul>
+<li>Snacks</li>
+<ul>
+<li>Nacho Cheese French Fries</li>
+<li>Cheese and crackers</li>
+</ul>
+</ul>
+
+<h2>Ordered HTML List</h2>
+<ol>
+<li>Numbers(1,2,...)</li>
+<li>Uppercase letters(A,B,...)</li>
+<li>Lowercase letters(a,b,...)</li>
+<li>Uppercase roman numbers(I,II,...)</li>
+<li>Lowercase roman numbers(i,ii,...)</li>
+</ol>
+<h3>Nested Ordered lists</h3>
+<ol>
+<li>Sandwiches</li>
+<ol type="1" start="20">
+<li>Ham and Cheese</li>
+<li>Grilled Cheese</li>
+</ol>
+<li>Snacks</li>
+<ol type="A" reversed>
+<li>Nacho Cheese French Fries</li>
+<li>Cheese and crackers</li>
+</ol>
+<li>Sushi</li>
+<ol type="I">
+<li value="4">Nacho Cheese French Fries</li>
+<li value="7">Cheese and crackers</li>
+</ol>
+</ol>
+
+<h2>HTML Description Lists </h2>
+<dl>
+<dt>CSE 302</dt>
+<dd>− Web Programming Lab</dd>
+</dl>
+
+<table border = "1" height="100" width = "100" cellpadding="10"
+cellspacing = "5">
+<caption>Student Information</caption>
+<tr>
+<th> Student ID</th>
+<th> Name</th>
+<th> Department</th>
+<th> Course</th>
+</tr>
+<tr>
+<td>212002001</td>
+<td>Mr. A</td>
+<td>CSE</td>
+<td>CSE 302</td>
+</tr>
+</table>
+
+<marquee>
+    Welcome to the Web Programming Lab!
+</marquee>
+
+<h3>Student Infomation of CSE Department</h3>
+<table border="5" height="100" width="300" cellpadding="5"
+cellspacing="5">
+
+<tr>
+    <th colspan="4">CSE Department</th>
+</tr>
+<tr>
+    <th rowspan = "2">Student ID</th>
+    <th rowspan = "2">Name</th>
+    <th colspan = "2">Program</th>
+</tr>
+<tr>
+    <th>Day</th>
+    <th>Evening</th>
+</tr>
+<tr>
+    <td>211002001</td>
+    <td>Ms. P</td>
+    <td>211D1</td>
+    <td>211EA</td>  
+</tr>
+<table>
+
+<body>
+    <h1>Registration Form</h1>
+    <form>
+        <input type="image" src="https://media.licdn.com/dms/image/v2/D5603AQF7VyLfANIwcQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1708086048910?e=1755734400&amp;v=beta&amp;t=dZFFk0I7C8xy9wt_H6oE_awuiJn772v-rPexlKa2e6Q" height="160" alt="Tanvir Ahmod" id="ember175" class="evi-image ember-view profile-photo-edit__preview" height="150" width="150"><br><br>
+
+        <label for="A">Student Name:</label>
+        <input type="text" id="A" name="fname" size="20" value="Tanvir Ahmod"><br><br>
+
+        <label for="B">Student ID:</label>
+        <input type="number" id="B" size="20" placeholder="Enter a number"><br><br>
+
+        <label for="C">Email:</label>
+        <input type="email" id="C" size="20" placeholder="Enter Your Email" required><br><br>
+
+        <label for="D">Username:</label>
+        <input type="text" id="D" size="20" maxlength="15" placeholder="Enter UserName" required><br><br>
+
+        <label for="E">Password:</label>
+        <input type="password" id="E" size="20" placeholder="Enter Password"><br><br>
+
+        <label for="F">Date of Birth:</label>
+        <input type="date" id="F" size="20" placeholder="Enter Date of Birth"><br><br>
+
+        Gender: <br>
+        <input type="radio" name="gender" value="M"> Male<br>
+        <input type="radio" name="gender" value="F"> Female<br><br>
+
+        Language: <br>
+        <input type="checkbox" name="language" value="B" checked> Bengali<br>
+        <input type="checkbox" name="language" value="E"> English<br><br>
+
+        Country: <br>
+        <select name="country">
+            <option>(Please select your Country)</option>
+            <option value="B">Bangladesh</option>
+            <option value="I">India</option>
+        </select><br><br>
+
+        <label for="G">Address:</label><br>
+        <textarea rows="5" cols="30" id="G" placeholder="Enter Your Present Address"></textarea><br><br>
+
+        Attach your Documents:<br>
+        <input type="file" name="Documents"><br><br>
+
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+    </form>
+</body>
+
+
+</body>
+</html>

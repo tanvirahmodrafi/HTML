@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      background-color: lightblue;
+      font-family: Verdana, sans-serif;
+      font-size: 16px;
+    }
+
+    h1, h2, h3 {
+      text-align: center;
+      color: Tomato;
+    }
+
+    p {
+      text-align: center;
+      color: red;
+      font-size: 20px;
+    }
+
+    #para1 {
+      text-align: center;
+      color: red;
+    }
+
+    .center {
+      text-align: center;
+      color: red;
+    }
+
+    .bg-example {
+      background-image: url("https://www.w3schools.com/css/img_tree.png");
+      background-repeat: no-repeat;
+      background-position: right top;
+      background-attachment: scroll;
+      background-color: lightblue;
+    }
+
+    p.solid { border-style: solid; }
+    p.dashed { border-style: dashed; }
+    p.border-example {
+      border: 2px solid rgb(200, 255, 0);
+      border-radius: 5px;
+    }
+
+    p.one { border-style: solid; border-width: 5px; }
+    p.two { border-style: solid; border-width: medium; }
+    p.three { border-style: dotted; border-width: 2px; }
+    p.four { border-style: dotted; border-width: thick; }
+
+    p.margins {
+      margin-top: 100px;
+      margin-bottom: 100px;
+      margin-right: 150px;
+      margin-left: 80px;
+    }
+
+    div.padded {
+      padding-top: 50px;
+      padding-right: 30px;
+      padding-bottom: 50px;
+      padding-left: 80px;
+      background-color: lightgray;
+    }
+
+    /* Height and Width */
+    div.box {
+      height: 200px;
+      width: 50%;
+      background-color: powderblue;
+      margin: auto;
+    }
+
+    /* Font Families */
+    .p1 { font-family: "Times New Roman", Times, serif; }
+    .p2 { font-family: Arial, Helvetica, sans-serif; }
+    .p3 { font-family: "Lucida Console", "Courier New", monospace; }
+
+    /* Table Styling */
+    table, th, td {
+      border: 1px solid;
+    }
+    table {
+      width: 100%;
+    }
+    th {
+      height: 70px;
+    }
+    th, td {
+      padding: 15px;
+      text-align: left;
+    }
+
+    /* Position Static */
+    div.static {
+      position: static;
+      border: 3px solid #73AD21;
+    }
+
+    /* Position Relative */
+    div.relative {
+      position: relative;
+      left: 30px;
+      border: 3px solid #73AD21;
+    }
+
+    /* CSS Animation */
+    div.animation-box {
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      animation-name: example;
+      animation-duration: 10s;
+    }
+
+    @keyframes example {
+      from {background-color: red;}
+      to {background-color: yellow;}
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      border-bottom: 1px dotted black;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: black;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>CSS Concepts Showcase</h1>
+
+  <!-- Selectors -->
+  <p>This is a styled paragraph (element selector).</p>
+  <p id="para1">This uses an ID selector.</p>
+  <p class="center">This uses a class selector.</p>
+
+  <!-- Background -->
+  <div class="bg-example" style="padding: 20px;">
+    <p>Background image applied to this section</p>
+  </div>
+
+  <!-- Borders -->
+  <p class="solid border-example">Solid Border</p>
+  <p class="dashed border-example">Dashed Border</p>
+
+  <!-- Border Widths -->
+  <p class="one">5px solid border</p>
+  <p class="two">Medium width border</p>
+  <p class="three">2px dotted border</p>
+  <p class="four">Thick dotted border</p>
+
+  <!-- Margin and Padding -->
+  <p class="margins">Paragraph with margins</p>
+  <div class="padded">Div with padding</div>
+
+  <!-- Height and Width -->
+  <div class="box">Box with height and width</div>
+
+  <!-- Font Families -->
+  <p class="p1">Times New Roman font</p>
+  <p class="p2">Arial font</p>
+  <p class="p3">Monospace font</p>
+
+  <!-- Table Example -->
+  <h2>Styled Table</h2>
+  <table>
+    <tr><th>Name</th><th>Role</th></tr>
+    <tr><td>Tanvir Ahmod</td><td>Developer</td></tr>
+    <tr><td>Bob Kutta</td><td>Designer</td></tr>
+  </table>
+
+  <!-- Positioning -->
+  <h2>Position: static</h2>
+  <div class="static">This div has static positioning</div>
+
+  <h2>Position: relative</h2>
+  <div class="relative">This div is shifted 30px to the right</div>
+
+  <!-- Animation -->
+  <h2>CSS Animation</h2>
+  <div class="animation-box"></div>
+  <p><b>Note:</b> After 4 seconds the box will turn yellow and reset.</p>
+
+  <!-- Tooltip -->
+  <h2>Basic Tooltip</h2>
+  <p>Hover over the text below:</p>
+  <div class="tooltip">Hover over me
+    <span class="tooltiptext">Tooltip text</span>
+  </div>
+
+</body>
+</html>

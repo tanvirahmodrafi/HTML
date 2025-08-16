@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fat Loss Tracker</title>
+<style>
+  :root{
+    --bg:#1e2937; --panel:#121821; --muted:#1a2230; --line:#233044;
+    --text:#e8eef8; --dim:#a9b6c7; --accent:#6ea8fe; --ok:#34d399; --warn:#f59e0b; --bad:#ef4444;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:linear-gradient(180deg,var(--bg),#0c121a 60%);
+    color:var(--text); font:15px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+  }
+  .wrap{max-width:1100px;margin:24px auto;padding:0 16px}
+  header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:14px}
+  h1{font-size:22px;margin:0}
+  .sub{color:var(--dim);font-size:13px}
+  .panel{
+    background:linear-gradient(180deg,var(--panel),#0f151f);
+    border:1px solid var(--line); border-radius:16px; padding:16px;
+    box-shadow:0 4px 24px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.02);
+  }
+  .grid{display:grid;gap:14px}
+  @media(min-width:920px){ .grid.cols-3{grid-template-columns:1fr 1fr 1fr} .grid.cols-2{grid-template-columns:1fr 1fr} }
+  .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  label{font-size:12px;color:var(--dim)}
+  input,select,button,textarea{
+    background:var(--muted); color:var(--text); border:1px solid var(--line);
+    padding:10px 12px; border-radius:10px; outline:none; font:inherit;
+  }
+  input:focus,select:focus,textarea:focus{border-color:#355fa8; box-shadow:0 0 0 3px rgba(110,168,254,.15)}
+  button{cursor:pointer; background:#1d2838; transition:.15s transform, .15s background}
+  button:hover{background:#253147}
+  button.primary{background:var(--accent); color:#0a0e16; border-color:#4e89ff}
+  button.ghost{background:transparent}
+  .pill{padding:6px 10px; border-radius:999px; font-size:12px; border:1px solid var(--line); background:var(--muted); color:var(--dim)}
+  .cards{display:grid; gap:14px}
+  @media(min-width:720px){ .cards{grid-template-columns:repeat(4,1fr)} }
+  .card{background:linear-gradient(180deg,#0f1722,#0c121b); border:1px solid var(--line); border-radius:14px; padding:14px}
+  .card h3{margin:0 0 6px 0; font-size:14px; color:var(--dim); font-weight:600}
+  .big{font-size:22px; font-weight:700}
+  .muted{color:var(--dim)}
+  .progress{height:10px; border-radius:6px; background:#0d1420; border:1px solid var(--line); overflow:hidden}
+  .progress > i{display:block;height:100%; background:linear-gradient(90deg,#1e88ff,#61a6ff)}
+  table{width:100%; border-collapse:collapse; overflow:hidden; border-radius:12px; border:1px solid var(--line)}
+  th,td{padding:10px 12px; text-align:left; border-bottom:1px solid var(--line); font-size:14px}
+  th{background:#111826; color:#c9d6e6; position:sticky; top:0; z-index:1}
+  tr:last-child td{border-bottom:none}
+  .tag{font-size:12px; padding:4px 8px; border-radius:999px; background:#162135; color:#9fb7e9; border:1px solid #263b63}
+  .right{margin-left:auto}
+  .danger{color:var(--bad)}
+  .good{color:var(--ok)}
+  .warn{color:var(--warn)}
+  details summary{cursor:pointer; user-select:none; color:var(--dim)}
+  .footer{margin:18px 0 60px; color:var(--dim); font-size:12px}
+  .spacer{height:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Fat Loss Tracker</h1>
+      <div class="sub">Daily logging with macros, targets, reports & 7‑day overview. Data is stored locally in your browser.</div>
+    </div>
+    <div class="row">
+      <label for="date">Date</label>
+      <input id="date" type="date"/>
+      <button id="todayBtn" class="pill">Today</button>
+      <button id="targetsBtn" class="pill">Targets</button>
+      <button id="foodsBtn" class="pill">Food DB</button>
+    </div>
+  </header>
+
+  <!-- Summary -->
+  <section class="cards">
+    <div class="card">
+      <h3>Calories</h3>
+      <div class="big" id="kcalNow">0</div>
+      <div class="muted"><span id="kcalTarget">/ 2400</span> kcal</div>
+      <div class="spacer"></div>
+      <div class="progress"><i id="kcalBar" style="width:0%"></i></div>
+    </div>
+    <div class="card">
+      <h3>Protein</h3>
+      <div class="big" id="pNow">0g</div>
+      <div class="muted"><span id="pTarget">/ 200g</span></div>
+      <div class="spacer"></div>
+      <div class="progress"><i id="pBar" style="width:0%"></i></div>
+    </div>
+    <div class="card">
+      <h3>Carbs</h3>
+      <div class="big" id="cNow">0g</div>
+      <div class="muted"><span id="cTarget">/ 250g</span></div>
+      <div class="spacer"></div>
+      <div class="progress"><i id="cBar" style="width:0%"></i></div>
+    </div>
+    <div class="card">
+      <h3>Fat</h3>
+      <div class="big" id="fNow">0g</div>
+      <div class="muted"><span id="fTarget">/ 67g</span></div>
+      <div class="spacer"></div>
+      <div class="progress"><i id="fBar" style="width:0%"></i></div>
+    </div>
+  </section>
+
+  <div class="spacer"></div>
+
+  <!-- Quick actions -->
+  <section class="panel">
+    <div class="row">
+      <div class="tag">Log a meal</div>
+      <div class="right row">
+        <button id="reportBtn" class="primary">End‑of‑Day Report</button>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="grid cols-3">
+      <div class="panel" style="padding:12px">
+        <label>Meal</label>
+        <select id="meal">
+          <option>Breakfast</option>
+          <option>Lunch</option>
+          <option>Post‑Workout</option>
+          <option>Dinner</option>
+          <option>Snack</option>
+        </select>
+      </div>
+      <div class="panel" style="padding:12px">
+        <label>Food</label>
+        <select id="foodSelect"></select>
+      </div>
+      <div class="panel" style="padding:12px">
+        <label>Amount</label>
+        <div class="row">
+          <input id="amount" type="number" min="0" step="0.1" placeholder="e.g., 150" style="flex:1">
+          <select id="unit"></select>
+          <button id="addBtn" class="primary">Add</button>
+        </div>
+      </div>
+    </div>
+
+    <details style="margin-top:10px">
+      <summary>Quick add (enter macros directly)</summary>
+      <div class="grid cols-2" style="margin-top:10px">
+        <div class="row">
+          <input id="qaDesc" placeholder="e.g., Restaurant meal (est.)" style="flex:1">
+          <input id="qaP" type="number" min="0" step="0.1" placeholder="Prot g" style="width:110px">
+          <input id="qaC" type="number" min="0" step="0.1" placeholder="Carb g" style="width:110px">
+          <input id="qaF" type="number" min="0" step="0.1" placeholder="Fat g" style="width:110px">
+          <button id="qaAdd" class="pill">Add quick</button>
+        </div>
+      </div>
+    </details>
+
+    <details style="margin-top:10px">
+      <summary>Water tracker</summary>
+      <div class="row" style="margin-top:8px">
+        <label>Water today (L)</label>
+        <input id="waterLiters" type="number" step="0.1" min="0" style="width:120px">
+        <button id="waterSave" class="pill">Save</button>
+        <div class="muted">Target suggestion: 3.0 L</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- Log table -->
+  <section class="panel" style="margin-top:14px">
+    <div class="row">
+      <div class="tag">Today's Log</div>
+      <div class="right row">
+        <button id="clearDay" class="ghost danger">Clear day</button>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div style="overflow:auto">
+      <table id="logTable">
+        <thead>
+          <tr>
+            <th style="width:120px">Time</th>
+            <th style="width:130px">Meal</th>
+            <th>Food</th>
+            <th class="right">Qty</th>
+            <th class="right">P (g)</th>
+            <th class="right">C (g)</th>
+            <th class="right">F (g)</th>
+            <th class="right">Kcal</th>
+            <th style="width:60px"></th>
+          </tr>
+        </thead>
+        <tbody id="logBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Weekly -->
+  <section class="panel" style="margin-top:14px">
+    <div class="row">
+      <div class="tag">Last 7 Days</div>
+      <div class="right row">
+        <button id="exportBtn" class="pill">Export</button>
+        <label for="importFile" class="pill" style="cursor:pointer">Import</label>
+        <input id="importFile" type="file" accept=".json" style="display:none">
+        <button id="clearAll" class="ghost danger">Clear all</button>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="grid cols-4">
+      <div class="card">
+        <h3>Avg Calories</h3>
+        <div class="big" id="wkKcal">0</div>
+        <div class="muted">vs target <span id="wkKcalDelta">0</span></div>
+      </div>
+      <div class="card">
+        <h3>Avg Protein</h3>
+        <div class="big" id="wkP">0g</div>
+        <div class="muted">goal 200g</div>
+      </div>
+      <div class="card">
+        <h3>Days hit protein</h3>
+        <div class="big" id="wkHitP">0/7</div>
+      </div>
+      <div class="card">
+        <h3>Avg Water</h3>
+        <div class="big" id="wkWater">0.0 L</div>
+      </div>
+    </div>
+  </section>
+
+  <p class="footer">Tips: prioritize protein (≥ 200g), keep calories ≈ 2400 for steady fat loss, low‑impact cardio if knees bother you (incline walk, cycling, rowing). Edit targets anytime.</p>
+</div>
+
+<!-- Targets modal -->
+<dialog id="targetsDlg">
+  <form method="dialog" class="panel" style="max-width:560px">
+    <h2 style="margin:0 0 8px 0">Daily Targets</h2>
+    <div class="grid cols-2">
+      <div><label>Calories (kcal)</label><input id="tKcal" type="number" min="0" step="10" value="2400" style="width:100%"></div>
+      <div><label>Protein (g)</label><input id="tP" type="number" min="0" step="1" value="200" style="width:100%"></div>
+      <div><label>Carbs (g)</label><input id="tC" type="number" min="0" step="1" value="250" style="width:100%"></div>
+      <div><label>Fat (g)</label><input id="tF" type="number" min="0" step="1" value="67" style="width:100%"></div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button value="cancel" class="pill">Close</button>
+      <button id="targetsSave" class="primary right">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Food DB modal -->
+<dialog id="foodsDlg">
+  <form method="dialog" class="panel" style="max-width:820px">
+    <h2 style="margin:0 0 8px 0">Food Database</h2>
+    <div class="sub" style="margin-bottom:10px">Macros are per 100g (for most foods) or per unit (egg, roti, scoop). Edit or add your own.</div>
+    <div style="max-height:320px; overflow:auto; border:1px solid var(--line); border-radius:12px">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th><th>Mode</th><th>Unit label</th><th class="right">P</th><th class="right">C</th><th class="right">F</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="foodsBody"></tbody>
+      </table>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button id="addFood" class="pill">Add Food</button>
+      <button value="cancel" class="pill right">Close</button>
+      <button id="saveFoods" class="primary">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function(){
+  // ---------- Utilities ----------
+  const $ = sel => document.querySelector(sel);
+  const fmt = (n, d=0) => Number(n).toFixed(d);
+  const todayStr = () => new Date().toISOString().slice(0,10);
+  const kcalOf = (p,c,f)=> p*4 + c*4 + f*9;
+
+  const LS_KEYS = {
+    targets: 'flt_targets',
+    foods: 'flt_foods',
+    days: 'flt_days',      // map date -> entries
+    water: 'flt_water'     // map date -> liters
+  };
+
+  const defaultTargets = { kcal: 2400, p: 200, c: 250, f: 67 };
+  const defaultFoods = [
+    // per 100g items
+    {id:id(), name:'Chicken breast (cooked)', mode:'per100g', unit:'100g', p:31, c:0, f:3.6},
+    {id:id(), name:'White fish (cooked)', mode:'per100g', unit:'100g', p:22, c:0, f:5},
+    {id:id(), name:'Rice, cooked', mode:'per100g', unit:'100g', p:2.7, c:28, f:0.3},
+    {id:id(), name:'Yogurt, regular', mode:'per100g', unit:'100g', p:3.5, c:4.7, f:3.3},
+    {id:id(), name:'Greek yogurt', mode:'per100g', unit:'100g', p:10, c:3.6, f:0.4},
+    {id:id(), name:'Potato, boiled', mode:'per100g', unit:'100g', p:2.0, c:17, f:0.1},
+    // per unit items
+    {id:id(), name:'Egg, large', mode:'perUnit', unit:'piece', p:6.3, c:0.4, f:5.3},
+    {id:id(), name:'Roti/Chapati (45g)', mode:'perUnit', unit:'piece', p:3.3, c:21, f:3.6},
+    {id:id(), name:'Whey protein (1 scoop ~30g)', mode:'perUnit', unit:'scoop', p:25, c:3, f:2},
+  ];
+
+  function id(){ return Math.random().toString(36).slice(2,9); }
+
+  // ---------- State ----------
+  let targets = load(LS_KEYS.targets) ?? defaultTargets;
+  let foods = load(LS_KEYS.foods) ?? defaultFoods;
+  let days = load(LS_KEYS.days) ?? {};     // date -> entries[]
+  let water = load(LS_KEYS.water) ?? {};   // date -> liters
+  let currentDate = todayStr();
+
+  // ---------- Storage helpers ----------
+  function save(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+  function load(key){ try { return JSON.parse(localStorage.getItem(key)); } catch(e){ return null; } }
+
+  // ---------- Init ----------
+  const dateInput = $('#date');
+  dateInput.value = currentDate;
+  fillTargetsUI();
+  buildFoodSelect();
+  updateUI();
+
+  // ---------- UI Wiring ----------
+  $('#todayBtn').addEventListener('click', ()=>{ dateInput.value = todayStr(); onDateChange(); });
+  dateInput.addEventListener('change', onDateChange);
+  $('#targetsBtn').addEventListener('click', ()=> $('#targetsDlg').showModal());
+  $('#foodsBtn').addEventListener('click', ()=> { buildFoodsTable(); $('#foodsDlg').showModal(); });
+
+  $('#targetsSave').addEventListener('click', (e)=>{
+    e.preventDefault();
+    targets = {
+      kcal: Number($('#tKcal').value)||0,
+      p: Number($('#tP').value)||0,
+      c: Number($('#tC').value)||0,
+      f: Number($('#tF').value)||0
+    };
+    save(LS_KEYS.targets, targets);
+    fillTargetsUI();
+    updateUI();
+    $('#targetsDlg').close();
+  });
+
+  $('#addFood').addEventListener('click', (e)=>{
+    e.preventDefault();
+    foods.push({id:id(), name:'New food', mode:'per100g', unit:'100g', p:0, c:0, f:0});
+    buildFoodsTable(true);
+  });
+
+  $('#saveFoods').addEventListener('click', (e)=>{
+    e.preventDefault();
+    // Read back from table inputs
+    const rows = [...document.querySelectorAll('#foodsBody tr')];
+    foods = rows.map(tr=>{
+      return {
+        id: tr.dataset.id,
+        name: tr.querySelector('.f_name').value.trim() || 'Food',
+        mode: tr.querySelector('.f_mode').value,
+        unit: tr.querySelector('.f_unit').value.trim() || (tr.querySelector('.f_mode').value==='per100g'?'100g':'unit'),
+        p: Number(tr.querySelector('.f_p').value)||0,
+        c: Number(tr.querySelector('.f_c').value)||0,
+        f: Number(tr.querySelector('.f_f').value)||0
+      };
+    });
+    save(LS_KEYS.foods, foods);
+    buildFoodSelect();
+    $('#foodsDlg').close();
+  });
+
+  // Delete food row (event delegation)
+  document.addEventListener('click', (e)=>{
+    if(e.target.classList.contains('delFood')){
+      const tr = e.target.closest('tr');
+      foods = foods.filter(x=> x.id !== tr.dataset.id);
+      buildFoodsTable(true);
+    }
+  });
+
+  // Add meal
+  $('#addBtn').addEventListener('click', ()=>{
+    const foodId = $('#foodSelect').value;
+    const amt = Number($('#amount').value);
+    if(!foodId || !isFinite(amt) || amt<=0){ alert('Enter a valid amount.'); return; }
+    const food = foods.find(f=>f.id===foodId);
+    const meal = $('#meal').value;
+    const unit = $('#unit').value;
+
+    let factor = 1;
+    if(food.mode==='per100g'){
+      // amount entered in grams
+      factor = amt/100;
+    } else {
+      // per unit
+      factor = amt; // 2 eggs -> factor 2
+    }
+
+    const p = +(food.p*factor).toFixed(1);
+    const c = +(food.c*factor).toFixed(1);
+    const f = +(food.f*factor).toFixed(1);
+    const kcal = Math.round(kcalOf(p,c,f));
+
+    const entry = {
+      id:id(), t: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
+      meal, food: food.name, amount: amt, unit,
+      p, c, f, kcal
+    };
+    (days[currentDate]??=[]).push(entry);
+    save(LS_KEYS.days, days);
+    $('#amount').value = '';
+    updateUI();
+  });
+
+  // Quick add
+  $('#qaAdd').addEventListener('click', ()=>{
+    const desc = $('#qaDesc').value.trim() || 'Quick add';
+    const p = Number($('#qaP').value)||0;
+    const c = Number($('#qaC').value)||0;
+    const f = Number($('#qaF').value)||0;
+    const kcal = Math.round(kcalOf(p,c,f));
+    (days[currentDate]??=[]).push({
+      id:id(), t:new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
+      meal: $('#meal').value, food: desc, amount: 1, unit:'entry', p:+p.toFixed(1), c:+c.toFixed(1), f:+f.toFixed(1), kcal
+    });
+    save(LS_KEYS.days, days);
+    $('#qaDesc').value = ''; $('#qaP').value = ''; $('#qaC').value=''; $('#qaF').value='';
+    updateUI();
+  });
+
+  // Delete entry
+  document.addEventListener('click', (e)=>{
+    if(e.target.classList.contains('delEntry')){
+      const id = e.target.dataset.id;
+      days[currentDate] = (days[currentDate]||[]).filter(x=> x.id!==id);
+      save(LS_KEYS.days, days);
+      updateUI();
+    }
+  });
+
+  // Clear day/all
+  $('#clearDay').addEventListener('click', ()=>{
+    if(confirm('Clear all entries for this day?')){
+      delete days[currentDate];
+      save(LS_KEYS.days, days);
+      updateUI();
+    }
+  });
+  $('#clearAll').addEventListener('click', ()=>{
+    if(confirm('This deletes ALL days, foods, water and targets (resets to defaults). Proceed?')){
+      localStorage.removeItem(LS_KEYS.days);
+      localStorage.removeItem(LS_KEYS.foods);
+      localStorage.removeItem(LS_KEYS.water);
+      // keep targets, or reset?
+      // localStorage.removeItem(LS_KEYS.targets);
+      days={}; foods=[...defaultFoods]; water={};
+      save(LS_KEYS.foods, foods);
+      buildFoodSelect(); buildFoodsTable();
+      updateUI();
+    }
+  });
+
+  // Water
+  $('#waterSave').addEventListener('click', ()=>{
+    const v = Number($('#waterLiters').value)||0;
+    water[currentDate] = v;
+    save(LS_KEYS.water, water);
+    updateUI();
+  });
+
+  // Report
+  $('#reportBtn').addEventListener('click', ()=>{
+    const {sum, hitP, kcalDiffTxt} = computeDay(currentDate);
+    const t = targets;
+    const lines = [];
+    lines.push(`Date: ${currentDate}`);
+    lines.push(`Calories: ${sum.kcal} / ${t.kcal} (${kcalDiffTxt(sum.kcal,t.kcal)})`);
+    lines.push(`Protein: ${sum.p}g / ${t.p}g ${sum.p>=t.p ? '✅' : '⚠️'}`);
+    lines.push(`Carbs:   ${sum.c}g / ${t.c}g`);
+    lines.push(`Fat:     ${sum.f}g / ${t.f}g`);
+    const w = water[currentDate] ?? 0;
+    lines.push(`Water:   ${w.toFixed(1)} L (goal ~3.0 L)`);
+    const entries = (days[currentDate]||[]).length;
+    lines.push('');
+    lines.push('Meals:');
+    (days[currentDate]||[]).forEach(e=>{
+      lines.push(`• [${e.t}] ${e.meal}: ${e.food} — ${e.amount} ${e.unit} → P${e.p} C${e.c} F${e.f} = ${e.kcal} kcal`);
+    });
+    if(entries===0) lines.push('• No meals logged.');
+    alert(lines.join('\n'));
+  });
+
+  // Export/Import
+  $('#exportBtn').addEventListener('click', ()=>{
+    const blob = new Blob([JSON.stringify({targets, foods, days, water}, null, 2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `fat-loss-tracker-${todayStr()}.json`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+  $('#importFile').addEventListener('change', (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ()=> {
+      try{
+        const obj = JSON.parse(reader.result);
+        if(obj.targets) { targets = obj.targets; save(LS_KEYS.targets, targets); }
+        if(obj.foods)   { foods   = obj.foods;   save(LS_KEYS.foods, foods); }
+        if(obj.days)    { days    = obj.days;    save(LS_KEYS.days, days); }
+        if(obj.water)   { water   = obj.water;   save(LS_KEYS.water, water); }
+        buildFoodSelect(); updateUI();
+        alert('Import complete.');
+      }catch(err){ alert('Invalid file.'); }
+    };
+    reader.readAsText(file);
+  });
+
+  // ---------- Functions ----------
+  function onDateChange(){
+    currentDate = dateInput.value || todayStr();
+    updateUI();
+  }
+
+  function fillTargetsUI(){
+    $('#kcalTarget').textContent = `/ ${targets.kcal}`;
+    $('#pTarget').textContent = `/ ${targets.p}g`;
+    $('#cTarget').textContent = `/ ${targets.c}g`;
+    $('#fTarget').textContent = `/ ${targets.f}g`;
+    $('#tKcal').value = targets.kcal;
+    $('#tP').value = targets.p;
+    $('#tC').value = targets.c;
+    $('#tF').value = targets.f;
+  }
+
+  function buildFoodSelect(){
+    const sel = $('#foodSelect');
+    sel.innerHTML = '';
+    foods.forEach(f=>{
+      const opt = document.createElement('option');
+      opt.value = f.id;
+      opt.textContent = f.name;
+      sel.appendChild(opt);
+    });
+    sel.addEventListener('change', onFoodChange);
+    onFoodChange(); // set unit field
+  }
+
+  function onFoodChange(){
+    const food = foods.find(f=> f.id === $('#foodSelect').value);
+    const unitSel = $('#unit');
+    unitSel.innerHTML = '';
+    if(!food) return;
+    if(food.mode==='per100g'){
+      unitSel.append(new Option('grams', 'g', true, true));
+    } else {
+      unitSel.append(new Option(food.unit, food.unit, true, true));
+    }
+  }
+
+  function buildFoodsTable(scrollToEnd=false){
+    const body = $('#foodsBody');
+    body.innerHTML = '';
+    foods.forEach(f=>{
+      const tr = document.createElement('tr');
+      tr.dataset.id = f.id;
+      tr.innerHTML = `
+        <td><input class="f_name" value="${escapeHtml(f.name)}" /></td>
+        <td>
+          <select class="f_mode">
+            <option value="per100g" ${f.mode==='per100g'?'selected':''}>per 100g</option>
+            <option value="perUnit" ${f.mode==='perUnit'?'selected':''}>per unit</option>
+          </select>
+        </td>
+        <td><input class="f_unit" value="${escapeHtml(f.unit)}" /></td>
+        <td class="right"><input class="f_p" type="number" step="0.1" value="${f.p}"></td>
+        <td class="right"><input class="f_c" type="number" step="0.1" value="${f.c}"></td>
+        <td class="right"><input class="f_f" type="number" step="0.1" value="${f.f}"></td>
+        <td><button class="pill delFood">Delete</button></td>
+      `;
+      body.appendChild(tr);
+    });
+    if(scrollToEnd) body.parentElement.scrollTop = body.parentElement.scrollHeight;
+  }
+
+  function escapeHtml(s){
+    return s.replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;' }[m]));
+  }
+
+  function computeDay(dateStr){
+    const list = days[dateStr]||[];
+    const sum = list.reduce((a,e)=> ({p:a.p+e.p, c:a.c+e.c, f:a.f+e.f, kcal:a.kcal+e.kcal}), {p:0,c:0,f:0,kcal:0});
+    sum.p = +sum.p.toFixed(1); sum.c = +sum.c.toFixed(1); sum.f = +sum.f.toFixed(1); sum.kcal = Math.round(sum.kcal);
+    const hitP = sum.p >= targets.p;
+    const kcalDiffTxt = (now,tgt)=> now===tgt? 'exact' : (now>tgt? `+${now-tgt}` : `-${tgt-now}`);
+    return {sum, hitP, kcalDiffTxt};
+  }
+
+  function updateUI(){
+    // Summary
+    const {sum} = computeDay(currentDate);
+    $('#kcalNow').textContent = sum.kcal;
+    $('#pNow').textContent = sum.p + 'g';
+    $('#cNow').textContent = sum.c + 'g';
+    $('#fNow').textContent = sum.f + 'g';
+
+    const pct = (now,tgt)=> Math.max(0, Math.min(100, tgt>0 ? (now/tgt*100) : 0));
+    $('#kcalBar').style.width = pct(sum.kcal, targets.kcal) + '%';
+    $('#pBar').style.width = pct(sum.p, targets.p) + '%';
+    $('#cBar').style.width = pct(sum.c, targets.c) + '%';
+    $('#fBar').style.width = pct(sum.f, targets.f) + '%';
+
+    // Log table
+    const body = $('#logBody');
+    body.innerHTML = '';
+    (days[currentDate]||[]).forEach(e=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${e.t}</td>
+        <td><span class="tag">${e.meal}</span></td>
+        <td>${escapeHtml(e.food)}</td>
+        <td class="right">${e.amount} ${escapeHtml(e.unit)}</td>
+        <td class="right">${e.p}</td>
+        <td class="right">${e.c}</td>
+        <td class="right">${e.f}</td>
+        <td class="right">${e.kcal}</td>
+        <td><button class="pill delEntry" data-id="${e.id}">✕</button></td>
+      `;
+      body.appendChild(tr);
+    });
+
+    // Water
+    const wl = water[currentDate] ?? 0;
+    $('#waterLiters').value = wl;
+
+    // Weekly stats
+    const last7 = lastNDates(currentDate, 7);
+    let tot={kcal:0,p:0, c:0, f:0}, hitPdays=0, waterTot=0;
+    last7.forEach(d=>{
+      const {sum, hitP} = computeDay(d);
+      tot.kcal += sum.kcal; tot.p += sum.p; tot.c += sum.c; tot.f += sum.f;
+      if(hitP) hitPdays++;
+      waterTot += (water[d] ?? 0);
+    });
+    const n = last7.length;
+    const avgKcal = Math.round(tot.kcal/n);
+    $('#wkKcal').textContent = avgKcal;
+    const deltaK = avgKcal - targets.kcal;
+    $('#wkKcalDelta').textContent = (deltaK>0? '+' : '') + deltaK;
+    $('#wkP').textContent = Math.round(tot.p/n) + 'g';
+    $('#wkHitP').textContent = `${hitPdays}/${n}`;
+    $('#wkWater').textContent = (waterTot/n).toFixed(1) + ' L';
+  }
+
+  function lastNDates(fromDateStr, n){
+    const res=[];
+    const base = new Date(fromDateStr);
+    for(let i=0;i<n;i++){
+      const d = new Date(base); d.setDate(base.getDate()-i);
+      res.push(d.toISOString().slice(0,10));
+    }
+    return res.reverse();
+  }
+
+})();
+</script>
+</body>
+</html>
