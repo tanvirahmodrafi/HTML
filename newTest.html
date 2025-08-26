@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://tinyurl.com/42a372dv" type=" image/png" rel="shortcut icon">
+    <title>Plus Minus</title>
+    <script>
+        function jogbiyog() {
+            let num1 = prompt("Enter first number:");
+            let num2 = prompt("Enter second number:");
+
+            let sum = parseInt(num1) + parseInt(num2);
+            let difference = parseInt(num1) - parseInt(num2);
+            let product = parseInt(num1) * parseInt(num2);
+            let quotient = parseFloat(num1) / parseFloat(num2);
+
+            document.getElementById("show").innerHTML = `
+                <h1> Sum: ${sum} </h1>
+                <h2> Difference: ${difference} </h2>
+                <h3> Product: ${product} </h3>
+                <h4> Quotient: ${quotient} </h4>
+            `;
+        }
+        function showAlert(arg) {
+            alert(arg);
+        }
+        function getname() {
+            let name = document.getElementById("name").value;
+            document.getElementById('i').innerHTML = `<h1>Hello ${name}!</h1>`;
+        }
+
+
+    </script>
+</head>
+
+<body>
+    <p id="show">
+        <button onDblClick="jogbiyog()" type="button">Click Me</button>
+    <p ondblclick="this.style.color = 'red'">hello</p>
+    <p ondblclick="this.style.color = 'blue'">world</p>
+    <h1 onmouseover="this.style.color = 'pink'" onmouseout="this.style.color = 'black'">touch me</h1>
+    <button onmouseover="this.style.color = 'pink'" onmouseout="this.style.color = 'black'"
+        ondbleclick="showAlert('double click')" onclick="showAlert('single click')">touch me</button>
+    <form onsubmit="showAlert('form submitted'); return 0">
+
+        <input type="text" placeholder="Enter your name">
+        <button type="submit">Submit</button>
+    </form>
+
+    <input type="text" onfocus="this.style.background='yellow'" placeholder="Click to focus"
+        onblur="this.style.background='white'">
+    <input type="text" placeholder="Hi likh">
+
+    </p>
+    <ul>This is list of foods
+        <li>Biryani</li>
+        <li>Pizza</li>
+        <ul>
+            <li>Cheese Pizza</li>
+            <ul>
+                <li>Cheese Burst Pizza</li>
+                <li>Cheese Stuffed Pizza</li>
+            </ul>
+            <li>Veg Pizza</li>
+            <li>Non-Veg Pizza</li>
+        </ul>
+        <li>Ice Cream</li>
+        <ol>
+            <li>Mango</li>
+            <li>Vanilla</li>
+            <li>Chocolate</li>
+        </ol>
+        <li>Chocolate</li>
+        <dl>
+            <dt>Chocolate</dt>
+            <dd>These kind of chocolate are used to be licked</dd>
+
+        </dl>
+    </ul>
+    >
+    <button id='name' onmouseover="prompt('Enter your name')"> hi</button>
+    <p id='i'></p>
+</body>
+
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 20px;
+            background-color: pink;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 50px;
+            border: none;
+            background-color: #131338;
+            color: white;
+            cursor: pointer;
+            float: right;
+            /* button stays top-right */
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 200px;
+            margin-left: 150px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 40px;
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            /* makes label sit on its own line */
+            font-size: 18px;
+            /* readable size */
+            font-weight: 600;
+            /* semi-bold for emphasis */
+            color: #131338;
+            /* matches your button color scheme */
+            margin-bottom: 6px;
+            /* space between label and input */
+            letter-spacing: 0.5px;
+            /* slight spacing for elegance */
+            text-align: left;
+            /* keeps label aligned left above input */
+        }
+
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 220px;
+        }
+    </style>
+
+    <script>
+        function showAlert(Alert) {
+            alert(Alert);
+        }
+
+        function changeBackgroundColor() {
+            if (document.body.style.backgroundColor === 'pink') {
+                document.body.style.backgroundColor = 'rgb(173, 244, 244)';
+            } else {
+                document.body.style.backgroundColor = 'pink';
+            }
+        }
+        function checkAndDisplayName() {
+            const FName = document.getElementById('name1').value;
+            const LName = document.getElementById('name2').value;
+            const Gender = document.getElementById('gender').value;
+
+            if (FName && LName && Gender) {
+                if (Gender === "Male" && document.body.style.backgroundColor !== 'rgb(173, 244, 244)') {
+                    document.getElementById("Show").innerHTML = `<h1>Go and Watch Barbie Mother**cker or change the background color</h1>`;
+                    return;
+                }
+                if (Gender === "Female" && document.body.style.backgroundColor !== 'pink') {
+                    document.getElementById("Show").innerHTML = `<h1>UMM you love Pegging Huh!!</h1>`;
+                    return;
+                }
+                document.getElementById("Show").innerHTML = `<h1>Hello, ${FName} ${LName}!</h1>`;
+            } else {
+                alert('Please enter both first and last names.');
+            }
+        }
+
+
+    </script>
+
+</head>
+
+<body>
+    <button onclick="changeBackgroundColor()">Change Color</button>
+    <div class="container">
+        <input type="text" id='name1' placeholder="Type your First name">
+        <input type="text" id='name2' placeholder="Type your Last name">
+        <!-- <button onclick="checkAndDisplayName()">Submit</button> -->
+
+        <label for="gender" style="margin-left: 70px;">Select Gender:</label>
+        <select name="gender" id="gender" style="margin-left: 150px;">
+            <option value="">-- Choose --</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+        <button type="button" onclick="checkAndDisplayName()" style="margin-left: 150px;">Submit</button>
+
+    </div>
+    <p id="Show" style="text-size-adjust: 24px;"></p>
+    <img src = "https://tinyurl.com/42a372dv" alt = "My image" style = "height: 400px; width: 270px">
+
+    
+
+</body>
+
+</html>

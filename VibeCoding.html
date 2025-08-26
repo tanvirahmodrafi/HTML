@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BotFuse — Automate Customer Service with AI</title>
+  <meta name="description" content="Provide an AI chatbot to businesses to automate customer service. See features, real‑time impact, onboarding process, and book an appointment." />
+  <style>
+    :root{
+      --bg:#0b1020; /* deep ink */
+      --panel:#111736; /* card */
+      --muted:#9aa5ce; /* text secondary */
+      --text:#e6e9ff; /* text */
+      --brand:#7c3aed; /* violet */
+      --brand-2:#06b6d4; /* cyan */
+      --success:#16a34a;
+      --danger:#ef4444;
+      --ring: 0 0 0 3px color-mix(in oklab, var(--brand) 25%, transparent);
+      --radius: 18px;
+      --shadow: 0 10px 30px rgb(0 0 0 / 0.35);
+      --grid-gap: clamp(16px, 1.8vw, 28px);
+    }
+
+    html{scroll-behavior:smooth}
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 10% -10%, color-mix(in oklab, var(--brand) 20%, transparent), transparent),
+                  radial-gradient(800px 500px at 100% 0%, color-mix(in oklab, var(--brand-2) 20%, transparent), transparent),
+                  var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit; text-decoration:none}
+    img{max-width:100%; display:block}
+    header{position:sticky; top:0; backdrop-filter:saturate(160%) blur(10px); background:color-mix(in oklab, var(--bg) 85%, transparent); border-bottom:1px solid #1d244d; z-index:10}
+    .container{max-width:1100px; margin:auto; padding:0 20px}
+    .nav{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
+    .brand{display:flex; gap:10px; align-items:center}
+    .logo{width:34px; height:34px; border-radius:10px; background: linear-gradient(135deg, var(--brand), var(--brand-2)); box-shadow: inset 0 0 20px #ffffff26}
+    .brand b{letter-spacing:0.2px}
+    .nav a.btn{padding:10px 14px; border:1px solid #2a3061; border-radius:12px}
+    .cta{background: linear-gradient(90deg, var(--brand), var(--brand-2)); border:none; color:#fff; padding:12px 16px; border-radius:12px; box-shadow:var(--shadow); cursor:pointer}
+    .cta:hover{opacity:.95}
+
+    /* Hero */
+    .hero{display:grid; grid-template-columns: 1.1fr 0.9fr; gap:var(--grid-gap); align-items:center; padding:60px 0 40px}
+    .hero h1{font-size: clamp(32px, 4vw, 52px); line-height:1.05; margin:0 0 12px}
+    .hero p{font-size: clamp(15px, 1.5vw, 18px); color:var(--muted); margin:0 0 24px}
+    .hero-card{background: linear-gradient(180deg, color-mix(in oklab, var(--panel) 85%, transparent), var(--panel)); border:1px solid #202759; border-radius: var(--radius); padding:22px; box-shadow: var(--shadow)}
+    .badges{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px}
+    .badge{font-size:12px; border:1px solid #2a3061; color:#cbd1ff; border-radius:999px; padding:6px 10px; background:#0f1636}
+
+    /* Sections */
+    section{padding:64px 0}
+    .section-title{font-size: clamp(24px, 2.8vw, 34px); margin:0 0 16px}
+    .section-sub{color:var(--muted); margin:0 0 28px}
+
+    /* Features */
+    .grid{display:grid; gap:var(--grid-gap)}
+    .grid.cols-3{grid-template-columns: repeat(3, minmax(0, 1fr))}
+    @media (max-width: 900px){.hero{grid-template-columns:1fr}.grid.cols-3{grid-template-columns:1fr}}
+    .card{background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)); border:1px solid #242b5c; border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); position:relative}
+    .card h3{margin:0 0 6px}
+    .icon{width:42px; height:42px; border-radius:12px; display:grid; place-items:center; background: linear-gradient(135deg, color-mix(in oklab, var(--brand) 30%, #12193b), #0f1636); border:1px solid #2c3266; margin-bottom:10px}
+
+    /* Stats */
+    .stats{display:grid; grid-template-columns:repeat(4, 1fr); gap:var(--grid-gap)}
+    @media (max-width: 900px){.stats{grid-template-columns:1fr 1fr}}
+    .stat{padding:18px; border-radius:16px; border:1px solid #252c5d; background: radial-gradient(600px 300px at 10% -10%, rgba(124,58,237,.1), transparent), #0f1534}
+    .stat .num{font-size: clamp(22px, 3vw, 34px); font-weight:700}
+    .stat .label{color:var(--muted); font-size:14px}
+
+    /* Process */
+    .process{display:grid; gap:16px}
+    .step{display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start; padding:16px; border:1px dashed #2b3164; border-radius:16px; background:#0e1431}
+    .step .dot{width:34px; height:34px; border-radius:50%; background: linear-gradient(135deg, var(--brand), var(--brand-2)); display:grid; place-items:center; font-weight:700}
+
+    /* Appointment */
+    form{display:grid; gap:14px}
+    .field{display:grid; gap:6px}
+    label{font-size:14px; color:#c7cbf8}
+    input, select, textarea{background:#0c1333; color:var(--text); border:1px solid #2a3061; padding:12px 12px; border-radius:12px; outline:none}
+    input:focus, select:focus, textarea:focus{box-shadow:var(--ring); border-color: color-mix(in oklab, var(--brand) 40%, #2a3061)}
+    textarea{min-height:110px; resize:vertical}
+    .form-row{display:grid; grid-template-columns:1fr 1fr; gap:var(--grid-gap)}
+    @media (max-width: 700px){.form-row{grid-template-columns:1fr}}
+    .help{font-size:12px; color:var(--muted)}
+    .success{display:none; padding:12px 14px; border-left:4px solid var(--success); background:#0f1d14; border-radius:12px}
+
+    /* Footer */
+    footer{padding:40px 0; color:#a9b3e8}
+    .footer-grid{display:grid; grid-template-columns:1fr auto; align-items:center}
+    @media (max-width: 800px){.footer-grid{grid-template-columns:1fr}}
+
+    /* Utility */
+    .row{display:flex; gap:10px; flex-wrap:wrap}
+    .center{text-align:center}
+    .ghost{background:transparent; border:1px solid #2a3061; color:#cbd1ff; padding:12px 16px; border-radius:12px}
+    .pill{border-radius:999px}
+    .accent{color:color-mix(in oklab, var(--brand-2) 70%, white)}
+  </style>
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header>
+    <div class="container nav">
+      <a href="#top" class="brand" aria-label="BotFuse home">
+        <span class="logo" aria-hidden="true"></span>
+        <b>BotFuse</b>
+      </a>
+      <nav class="row" aria-label="Primary">
+        <a href="#features">Features</a>
+        <a href="#impact">Impact</a>
+        <a href="#process">Registration</a>
+        <a href="#book" class="btn">Book an Appointment</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main id="top" class="container">
+    <section class="hero" aria-label="Hero">
+      <div>
+        <div class="badges">
+          <span class="badge">24/7 Automation</span>
+          <span class="badge">Human Handoff</span>
+          <span class="badge">WhatsApp · Web · Messenger</span>
+        </div>
+        <h1>Automate customer service with <span class="accent">AI chatbots</span>.</h1>
+        <p>We help businesses deploy AI agents that resolve FAQs, capture leads, and escalate to humans when it matters — across your website, WhatsApp, Facebook, and more.</p>
+        <div class="row">
+          <a class="cta" href="#book">Book a demo</a>
+          <a class="ghost" href="#features">See features</a>
+        </div>
+      </div>
+      <div class="hero-card" role="img" aria-label="Product preview">
+        <div style="display:grid; gap:10px">
+          <div class="row" style="justify-content:space-between; align-items:center">
+            <div class="row">
+              <div class="logo" aria-hidden="true"></div>
+              <div>
+                <div style="font-weight:700">BotFuse Agent</div>
+                <div style="color:var(--muted); font-size:12px">Live • Web & WhatsApp</div>
+              </div>
+            </div>
+            <span class="badge">Average handle time: 7s</span>
+          </div>
+          <div class="card" style="min-height:180px">
+            <div class="row" style="align-items:flex-start; gap:12px">
+              <div class="icon" aria-hidden="true">💬</div>
+              <div>
+                <p style="margin:0 0 8px"><b>User</b>: Do you support Bengali and English?</p>
+                <p style="margin:0 0 8px"><b>Bot</b>: Yes! Our chatbot is <i>multilingual</i> and can reply in your preferred language instantly. Would you like a demo?</p>
+                <p style="margin:0"><b>Bot</b>: I can also connect you to a human if you prefer ☺️</p>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="justify-content:flex-end">
+            <a class="ghost" href="#impact">See impact ↓</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" aria-labelledby="features-title">
+      <h2 id="features-title" class="section-title">Powerful features for real‑world support</h2>
+      <p class="section-sub">Everything you need to automate routine conversations and keep humans focused on high‑value tasks.</p>
+      <div class="grid cols-3">
+        <article class="card">
+          <div class="icon">⚡</div>
+          <h3>Instant Answers</h3>
+          <p class="section-sub">Respond in milliseconds using your FAQs, PDFs, and website content.</p>
+        </article>
+        <article class="card">
+          <div class="icon">🌐</div>
+          <h3>Omnichannel</h3>
+          <p class="section-sub">Deploy on Website, WhatsApp, Facebook, Instagram, and more.</p>
+        </article>
+        <article class="card">
+          <div class="icon">🧠</div>
+          <h3>Retrieval & Reasoning</h3>
+          <p class="section-sub">Grounded responses with sources and reasoning safeguards.</p>
+        </article>
+        <article class="card">
+          <div class="icon">🧩</div>
+          <h3>Human Handoff</h3>
+          <p class="section-sub">Seamless transfer to your live agents via your helpdesk.</p>
+        </article>
+        <article class="card">
+          <div class="icon">📈</div>
+          <h3>Analytics</h3>
+          <p class="section-sub">Track resolved chats, CSAT, lead captures, and deflection rate.</p>
+        </article>
+        <article class="card">
+          <div class="icon">🔒</div>
+          <h3>Security</h3>
+          <p class="section-sub">PII redaction, role‑based access, and data residency options.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Impact / Social Proof -->
+    <section id="impact" aria-labelledby="impact-title">
+      <h2 id="impact-title" class="section-title">Real impact at a glance</h2>
+      <p class="section-sub">Live counters showing how many people have been helped by our chatbots.</p>
+      <div class="stats" role="list">
+        <div class="stat" role="listitem">
+          <div class="num" data-count-to="1254300" data-suffix="+">0</div>
+          <div class="label">Customer questions answered</div>
+        </div>
+        <div class="stat" role="listitem">
+          <div class="num" data-count-to="32000" data-suffix="+">0</div>
+          <div class="label">Leads captured</div>
+        </div>
+        <div class="stat" role="listitem">
+          <div class="num" data-count-to="780" data-suffix=" businesses">0</div>
+          <div class="label">Businesses automated</div>
+        </div>
+        <div class="stat" role="listitem">
+          <div class="num" data-count-to="94" data-suffix="%">0</div>
+          <div class="label">Avg. customer satisfaction</div>
+        </div>
+      </div>
+      <p class="help" style="margin-top:10px">Tip: Replace the placeholder numbers in the HTML <code>data-count-to</code> attributes with your live metrics.</p>
+    </section>
+
+    <!-- Process / Registration Steps -->
+    <section id="process" aria-labelledby="process-title">
+      <h2 id="process-title" class="section-title">Registration process — simple & fast</h2>
+      <p class="section-sub">Get your AI chatbot live in days, not weeks.</p>
+      <div class="process">
+        <div class="step">
+          <div class="dot" aria-hidden="true">1</div>
+          <div>
+            <h3>Sign up</h3>
+            <p class="section-sub">Create an account and tell us about your business goals.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="dot" aria-hidden="true">2</div>
+          <div>
+            <h3>Connect channels</h3>
+            <p class="section-sub">Choose where the bot will live — Website widget, WhatsApp, Facebook, etc.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="dot" aria-hidden="true">3</div>
+          <div>
+            <h3>Train the bot</h3>
+            <p class="section-sub">Upload FAQs, documents or link your site. We set up grounded responses with safety checks.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="dot" aria-hidden="true">4</div>
+          <div>
+            <h3>Test & go live</h3>
+            <p class="section-sub">Pilot for a few days, enable human handoff, then deploy to production.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Appointment Booking -->
+    <section id="book" aria-labelledby="book-title">
+      <h2 id="book-title" class="section-title">Book an appointment</h2>
+      <p class="section-sub">Pick a time that works for you. We’ll send you a calendar invite instantly.</p>
+
+      <div class="card">
+        <form id="appt-form" novalidate>
+          <div class="form-row">
+            <div class="field">
+              <label for="name">Full name</label>
+              <input id="name" name="name" type="text" autocomplete="name" required placeholder="Jane Doe" />
+            </div>
+            <div class="field">
+              <label for="email">Work email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@company.com" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="company">Company</label>
+              <input id="company" name="company" type="text" placeholder="Acme Ltd." />
+            </div>
+            <div class="field">
+              <label for="size">Company size</label>
+              <select id="size" name="size">
+                <option value="1-10">1–10</option>
+                <option value="11-50">11–50</option>
+                <option value="51-200">51–200</option>
+                <option value="201-1000">201–1,000</option>
+                <option value=">1000">1000+</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="goal">What would you like to achieve?</label>
+            <textarea id="goal" name="goal" placeholder="e.g., Reduce response time, capture leads, support on WhatsApp…"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="date">Preferred date</label>
+              <input id="date" name="date" type="date" required />
+            </div>
+            <div class="field">
+              <label for="time">Preferred time</label>
+              <input id="time" name="time" type="time" required />
+              <div class="help">Your timezone: <span id="tz"></span></div>
+            </div>
+          </div>
+          <div class="row">
+            <button class="cta" type="submit">Schedule meeting</button>
+            <button class="ghost" type="button" id="mailtoBtn">Email instead</button>
+          </div>
+          <div id="success" class="success" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+      <p class="help" style="margin-top:10px">This is a front‑end demo. Connect the form to your CRM (HubSpot, Airtable, Google Forms) or a booking tool (Calendly) by changing the <code>submit</code> handler.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <p>© <span id="year"></span> BotFuse • AI customer service for modern businesses.</p>
+      <div class="row">
+        <a class="badge" href="#features">Features</a>
+        <a class="badge" href="#impact">Impact</a>
+        <a class="badge" href="#process">Registration</a>
+        <a class="badge" href="#book">Book</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // --- Utilities ---
+    const $ = (s, r=document) => r.querySelector(s);
+    const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+    // Year + timezone text
+    const yearEl = $('#year');
+    if(yearEl) yearEl.textContent = new Date().getFullYear();
+    const tzEl = $('#tz');
+    try{ tzEl.textContent = Intl.DateTimeFormat().resolvedOptions().timeZone; }catch{ tzEl.textContent = 'Local time'; }
+
+    // --- Animated counters ---
+    const ease = t => 1 - Math.pow(1 - t, 3);
+    function animateNumber(el){
+      const target = parseInt(el.getAttribute('data-count-to'), 10) || 0;
+      const suffix = el.getAttribute('data-suffix') || '';
+      const dur = 1200 + Math.random()*600;
+      const from = 0;
+      const start = performance.now();
+      function tick(now){
+        const p = Math.min(1, (now - start)/dur);
+        const val = Math.floor(from + (target - from)*ease(p));
+        el.textContent = val.toLocaleString() + suffix;
+        if(p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if(e.isIntersecting){
+          $$('.num', e.target).forEach(animateNumber);
+          observer.unobserve(e.target);
+        }
+      });
+    }, {threshold: 0.3});
+    const impactSection = $('#impact');
+    if(impactSection) observer.observe(impactSection);
+
+    // --- Appointment form handling ---
+    const form = $('#appt-form');
+    const success = $('#success');
+    const mailBtn = $('#mailtoBtn');
+
+    function toICSDate(dateStr, timeStr){
+      // Combine local date + time => UTC YYYYMMDDTHHMMSSZ
+      const [y,m,d] = dateStr.split('-').map(Number);
+      const [hh,mm] = timeStr.split(':').map(Number);
+      const dt = new Date(y, (m-1), d, hh, mm, 0);
+      const ymd = dt.getUTCFullYear().toString().padStart(4,'0')
+               + String(dt.getUTCMonth()+1).padStart(2,'0')
+               + String(dt.getUTCDate()).padStart(2,'0');
+      const hms = String(dt.getUTCHours()).padStart(2,'0')
+               + String(dt.getUTCMinutes()).padStart(2,'0')
+               + '00';
+      return ymd + 'T' + hms + 'Z';
+    }
+
+    function downloadICS({name, email, company, date, time}){
+      const uid = (Date.now() + '-' + Math.random()).replace(/\W/g,'');
+      const start = toICSDate(date, time);
+      // default duration 30m
+      const endDt = new Date(new Date(date + 'T' + time).getTime() + 30*60000);
+      const end = toICSDate(endDt.toISOString().slice(0,10), endDt.toTimeString().slice(0,5));
+      const summary = `Discovery Call — BotFuse`;
+      const description = `Booked by: ${name} (${email})%0D%0ACompany: ${company || 'N/A'}%0D%0A—%0D%0AWe look forward to meeting you!`;
+      const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || 'Local');
+      const ics = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//BotFuse//Appointment//EN',
+        'CALSCALE:GREGORIAN',
+        'BEGIN:VEVENT',
+        'UID:'+uid,
+        'DTSTAMP:'+toICSDate(date, time),
+        'DTSTART:'+start,
+        'DTEND:'+end,
+        'SUMMARY:'+summary,
+        'DESCRIPTION:'+description,
+        'LOCATION:Google Meet (link to follow)',
+        'X-MICROSOFT-CDO-BUSYSTATUS:BUSY',
+        'END:VEVENT',
+        'END:VCALENDAR' 
+      ].join('\r\n');
+      const blob = new Blob([ics], {type:'text/calendar'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'botfuse-appointment.ics';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 2000);
+    }
+
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const name = fd.get('name')?.toString().trim();
+      const email = fd.get('email')?.toString().trim();
+      const company = fd.get('company')?.toString().trim();
+      const date = fd.get('date')?.toString();
+      const time = fd.get('time')?.toString();
+
+      if(!name || !email || !date || !time){
+        success.style.display = 'block';
+        success.style.borderLeftColor = getComputedStyle(document.documentElement).getPropertyValue('--danger');
+        success.textContent = 'Please fill in your name, email, date and time.';
+        return;
+      }
+
+      // Download ICS file immediately
+      downloadICS({name, email, company, date, time});
+
+      // Show success message
+      success.style.display = 'block';
+      success.style.borderLeftColor = getComputedStyle(document.documentElement).getPropertyValue('--success');
+      success.innerHTML = 'Thanks, '+ name + '! Your appointment has been scheduled. <b>Check your downloads for the calendar invite (ICS)</b> and we\'ll confirm by email.';
+
+      // Reset form after a short delay
+      setTimeout(()=> form.reset(), 600);
+    });
+
+    mailBtn?.addEventListener('click', () => {
+      const fd = new FormData(form);
+      const subject = encodeURIComponent('Booking: BotFuse demo');
+      const lines = [
+        'Hi BotFuse team,',
+        '',
+        'I\'d like to book a demo.',
+        'Name: ' + (fd.get('name') || ''),
+        'Email: ' + (fd.get('email') || ''),
+        'Company: ' + (fd.get('company') || ''),
+        'Size: ' + (fd.get('size') || ''),
+        'Goal: ' + (fd.get('goal') || ''),
+        'Preferred: ' + (fd.get('date') || '') + ' ' + (fd.get('time') || ''),
+      ];
+      const body = encodeURIComponent(lines.join('\n'));
+      window.location.href = `mailto:hello@yourdomain.com?subject=${subject}&body=${body}`;
+    });
+
+    // Respect reduced motion
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      document.querySelectorAll('*').forEach(el=> el.style.scrollBehavior = 'auto');
+    }
+  </script>
+</body>
+</html>
